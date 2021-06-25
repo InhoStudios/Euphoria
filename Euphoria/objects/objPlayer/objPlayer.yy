@@ -5,10 +5,7 @@
   },
   "solid": false,
   "visible": true,
-  "spriteMaskId": {
-    "name": "sprPlayerIdleRight",
-    "path": "sprites/sprPlayerIdleRight/sprPlayerIdleRight.yy",
-  },
+  "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
     "name": "objEntity",

@@ -6,6 +6,7 @@ function getInput() {
 	keyUp = keyboard_check(ord("W"));
 	keyDown = keyboard_check(ord("S"));
 	keyAttack = keyboard_check_pressed(vk_space);
+	keySlide = keyboard_check(vk_control);
 }
 
 function moveState() {
@@ -26,14 +27,56 @@ function moveState() {
 		dmg.image_xscale = moveScale;
 		state = attackState;
 	}
+	
+	if (keySlide && abs(hsp) >= moveSpeed && place_meeting(x, y + 1, objSolid)) {
+		moveScale = keyRight - keyLeft;
+		if (moveScale == 0) moveScale = image_xscale;
+		curAccel = slideDecel;
+		hsp = moveScale * slideSpeed;
+		state = slideState;
+	}
+		
+		
+}
+
+function slideState() {
+	moveScale = 0;
+	if (place_meeting(x + hsp, y - 1, objSolid) && abs(hsp) <= moveSpeed) {
+		var diff = moveSpeed - abs(hsp);
+		if (diff >= moveSpeed / 3) {
+			curAccel = accel;
+			curMoveSpeed = moveSpeed;
+			hsp = 0;
+			state = moveState;
+		}
+		if (place_meeting(x, y - 30, objSolid)) {
+			moveScale = image_xscale;
+			hsp = moveScale * (moveSpeed - diff);
+		}
+	}
+	
+	if (!keySlide && !place_meeting(x, y - 30, objSolid)) {
+		curAccel = accel;
+		curMoveSpeed = moveSpeed;
+		hsp = image_xscale * curMoveSpeed;
+		state = moveState;
+	}
+}
+
+function attackState() {
+	moveScale = 0;
+	if (image_index >= image_number - 1) {
+		sprite_index = idleSprite;
+		state = moveState;
+	}
 }
 
 function handlePhysics() {
 	
-	if (abs(moveScale) != 0 && abs(hsp) < moveSpeed) {
-		hsp += (moveScale) * accel;
+	if (abs(moveScale) != 0 && abs(hsp) < curMoveSpeed) {
+		hsp += (moveScale) * curAccel;
 	} else if (sign(moveScale) != sign(hsp) && abs(hsp) > 2 * abs(threshold)) {
-		hsp -= sign(hsp) * decel + sign(hsp) * accel * place_meeting(x, y + 1, objSolid);
+		hsp -= sign(hsp) * decel + sign(hsp) * curAccel * place_meeting(x, y + 1, objSolid);
 	} else if (abs(hsp) <= 2 * abs(threshold)) {
 		hsp = 0;
 	}
@@ -62,16 +105,16 @@ function handlePhysics() {
 
 function handleSprites() {
 	if (sign(hsp) == 1) {
-		atkSprite = sprPlayerAttackRight;
+		atkSprite = sprPlayerAttackLeft;
 		moveSprite = sprPlayerRunLeft;
 		jumpSprite = noone;
-		slideSprite = noone;
-		idleSprite = sprPlayerIdleRight;
+		slideSprite = sprPlayerSlideLeft;
+		idleSprite = sprPlayerIdleLeft;
 	} else if (sign(hsp) == -1) {
 		atkSprite = sprPlayerAttackLeft;
 		moveSprite = sprPlayerRunLeft;
 		jumpSprite = noone;
-		slideSprite = noone;
+		slideSprite = sprPlayerSlideLeft;
 		idleSprite = sprPlayerIdleLeft;
 	}
 	switch(state) {
@@ -91,25 +134,21 @@ function handleSprites() {
 			}
 			if (!place_meeting(x, y + 1, objSolid)) {
 				var hangFrame = 3;
-				if (image_index > 5) {
+				if (image_index > 4) {
 					hangFrame = 8;
 				}
-				hangFrame = hangFrame;
-				image_index = hangFrame;
+				if (image_index >= hangFrame - 1) {
+					image_index = hangFrame;
+				}
 			}
 			break;
 		case attackState:
 			image_speed = actionBR;
 			if (sprite_index != atkSprite) sprite_index = atkSprite;
 			break;
+		case slideState:
+			if (sprite_index != slideSprite) sprite_index = slideSprite;
+			break;
 			
-	}
-}
-
-function attackState() {
-	moveScale = 0;
-	if (image_index >= image_number - 1) {
-		sprite_index = idleSprite;
-		state = moveState;
 	}
 }

@@ -12,6 +12,7 @@
     {"id":{"name":"objDamageBox","path":"objects/objDamageBox/objDamageBox.yy",},"order":4,},
     {"id":{"name":"sprSolid","path":"sprites/sprSolid/sprSolid.yy",},"order":1,},
     {"id":{"name":"sprPlayerAttackRight","path":"sprites/sprPlayerAttackRight/sprPlayerAttackRight.yy",},"order":3,},
+    {"id":{"name":"sprPlayerSlideLeft","path":"sprites/sprPlayerSlideLeft/sprPlayerSlideLeft.yy",},"order":6,},
     {"id":{"name":"objSolid","path":"objects/objSolid/objSolid.yy",},"order":2,},
     {"id":{"name":"sprCamera","path":"sprites/sprCamera/sprCamera.yy",},"order":0,},
     {"id":{"name":"sprPlayerAttackLeft","path":"sprites/sprPlayerAttackLeft/sprPlayerAttackLeft.yy",},"order":1,},

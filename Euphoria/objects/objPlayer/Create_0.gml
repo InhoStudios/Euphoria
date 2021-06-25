@@ -6,10 +6,14 @@ getInput();
 moveSpeed = 5;
 jumpSpeed = 8;
 atkJolt = 3;
+slideSpeed = 9;
+curMoveSpeed = moveSpeed;
 
 // acceleration
 accel = 0.5;
 decel = 0.1;
+slideDecel = 0.02;
+curAccel = accel;
 threshold = accel + decel;
 
 // movement variables
@@ -21,11 +25,11 @@ moveScale = 0;
 state = moveState;
 
 // sprites
-atkSprite = sprPlayerAttackRight;
+atkSprite = sprPlayerAttackLeft;
 moveSprite = sprPlayerRunLeft;
 jumpSprite = noone;
-slideSprite = noone;
-idleSprite = sprPlayerIdleRight;
+slideSprite = sprPlayerSlideLeft;
+idleSprite = sprPlayerIdleLeft;
 
 // animations
 calmBR = 0.4;

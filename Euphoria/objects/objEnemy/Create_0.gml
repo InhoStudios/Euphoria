@@ -11,10 +11,11 @@ range = 64;
 // acceleration
 accel = 0.5;
 decel = 0.1;
+curAccel = accel;
 threshold = accel + decel;
 
 // movement variables
-moveSpeed = walkSpeed;
+curMoveSpeed = walkSpeed;
 hsp = 0;
 vsp = 0;
 moveScale = 0;
