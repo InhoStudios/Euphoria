@@ -1,5 +1,7 @@
 /// @description Insert description here
 // You can write your code in this editor
+event_inherited();
+
 hp = 3;
 // movement constants
 walkSpeed = 3;
@@ -20,13 +22,9 @@ hsp = 0;
 vsp = 0;
 moveScale = 0;
 
-// atk variables
-resetTick = 0;
-resetTimer = 5;
-
 // state machine
 state = enemMeleeMoveState;
-lastState = state;
+resetState = enemMeleeMoveState;
 
 // sprites
 atkSprite = sprEnemy;
@@ -40,3 +38,5 @@ calmBR = 0.2;
 actionBR = 0.5;
 idleBreathRate = calmBR;
 image_speed = idleBreathRate;
+
+deathSeq = instance_destroy;

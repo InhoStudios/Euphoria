@@ -1,6 +1,9 @@
 /// @description Insert description here
 // You can write your code in this editor
+event_inherited();
+
 getInput();
+declareAbilities();
 
 // movement constants
 moveSpeed = 5;
@@ -8,6 +11,8 @@ jumpSpeed = 8;
 atkJolt = 3;
 slideSpeed = 9;
 curMoveSpeed = moveSpeed;
+
+dashDist = 256;
 
 // acceleration
 accel = 0.5;
@@ -23,6 +28,7 @@ moveScale = 0;
 
 // state machine
 state = moveState;
+resetState = moveState;
 
 // sprites
 atkSprite = sprPlayerAttackLeft;

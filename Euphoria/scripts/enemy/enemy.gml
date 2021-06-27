@@ -13,44 +13,64 @@ function enemMeleeMoveState() {
 	}
 	
 	if (place_meeting(x, y, objEntity)) {
-		moveSpeed = collideSpeed;
+		curMoveSpeed = collideSpeed;
 	} else {
-		moveSpeed = walkSpeed;
+		curMoveSpeed = walkSpeed;
 	}
 }
 
-function handleEnemDamage() {
-	if (place_meeting(x, y, objDamageBox) && image_blend != c_red) {
-		var dmg = instance_nearest(x, y, objDamageBox);
-		hp -= dmg.damage;
+function enemDroneIdleState() {
+	
+	var atNatHeight = true;
+	
+	for (var i = 0; i < naturalHeight; i += 8) {
 		
-		// take damage
-		moveScale = dmg.image_xscale;
-		hsp = dmg.image_xscale * moveSpeed;
-		image_blend = c_red;
-		vsp = -jumpSpeed;
-		resetTick = resetTimer;
-		lastState = enemMeleeMoveState;
+		if (place_meeting(x, y + i, objSolid)) {
+			atNatHeight = false;
+			break;
+		}
 		
-		state = enemDamageState;
 	}
+	
+	if (atNatHeight) {
+		if (floatTick < floatTimer) {
+			floatTick++;
+			if (floatTick <= floatTimer / 2) 
+				vsp += floatDir * floatAccel;
+			else 
+				vsp -= floatDir * floatAccel;
+		} else {
+			floatDir *= -1;
+			floatTick = 0;
+			vsp = 0;
+		}
+		if (instance_exists(objPlayer) && objPlayer.x > x - range && objPlayer.x < x + range) {
+			state = enemDroneMoveState;
+		}
+	} else {
+		vsp -= floatAccel;
+		floatDir = -1;
+		floatTick = 0;
+	}
+}
 
-	if (hp <= 0) instance_destroy();
+function enemDroneMoveState() {
+	
+	if (hsp != 0) image_xscale = sign(hsp);
+	
+	moveScale = lengthdir_x(1, point_direction(x, y, objPlayer.x, objPlayer.y));
+	vsp = lengthdir_y(walkSpeed, point_direction(x, y, objPlayer.x, objPlayer.y));
+	
+	if (objPlayer.x < x - range || objPlayer.x > x + range) {
+		moveScale = 0;
+		vsp = 0;
+		floatTick = 0;
+		state = enemDroneIdleState;
+	}
+	
+	if (place_meeting(x, y, objPlayer)) instance_destroy();
+	
 }
 
 function enemMeleeAtkState() {
-}
-
-function enemDamageState() {
-	
-	if (place_meeting(x, y + 1, objSolid)) {
-		resetTick--;
-	}
-	
-	if (resetTick <= 0) {
-		state = lastState;
-		moveScale = 0;
-		image_blend = c_white;
-	}
-	
 }

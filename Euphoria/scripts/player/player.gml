@@ -7,10 +7,15 @@ function getInput() {
 	keyDown = keyboard_check(ord("S"));
 	keyAttack = keyboard_check_pressed(vk_space);
 	keySlide = keyboard_check(vk_control);
+	
+	keySlot1 = keyboard_check_pressed(ord("Q"));
+	keySlot2 = keyboard_check_pressed(ord("E"));
+	keySlot3 = keyboard_check_pressed(vk_shift);
 }
 
 function moveState() {
 	moveScale = keyRight - keyLeft;
+	curAccel = accel;
 
 	if (hsp != 0) image_xscale = sign(hsp);
 
@@ -25,6 +30,7 @@ function moveState() {
 		image_index = 0;
 		var dmg = instance_create_layer(x, y, layer, objDamageBox);
 		dmg.image_xscale = moveScale;
+		dmg.creator = id;
 		state = attackState;
 	}
 	
@@ -69,38 +75,6 @@ function attackState() {
 		sprite_index = idleSprite;
 		state = moveState;
 	}
-}
-
-function handlePhysics() {
-	
-	if (abs(moveScale) != 0 && abs(hsp) < curMoveSpeed) {
-		hsp += (moveScale) * curAccel;
-	} else if (sign(moveScale) != sign(hsp) && abs(hsp) > 2 * abs(threshold)) {
-		hsp -= sign(hsp) * decel + sign(hsp) * curAccel * place_meeting(x, y + 1, objSolid);
-	} else if (abs(hsp) <= 2 * abs(threshold)) {
-		hsp = 0;
-	}
-	
-	if (vsp < 12) {
-		vsp += grav;
-	}
-	
-	// horizontal collision
-	if (place_meeting(x + hsp, y, objSolid)) {
-		while (!place_meeting(x + sign(hsp), y, objSolid)) {
-			x += sign(hsp);
-		}
-		hsp = 0;
-	}
-	x += hsp;
-
-	if (place_meeting(x, y + vsp, objSolid)) {
-		while (!place_meeting(x, y + sign(vsp), objSolid)) {
-			y += sign(vsp);
-		}
-		vsp = 0;
-	}
-	y += vsp;
 }
 
 function handleSprites() {
