@@ -19,7 +19,13 @@ function enemMeleeMoveState() {
 	}
 }
 
+function enemMeleeAtkState() {
+}
+
 function enemDroneIdleState() {
+	sprite_index = sprDrone;
+	
+	explodeTick = 0;
 	
 	var atNatHeight = true;
 	
@@ -55,22 +61,37 @@ function enemDroneIdleState() {
 }
 
 function enemDroneMoveState() {
+	sprite_index = sprDroneAggro;
+	explodeTick = 0;
 	
 	if (hsp != 0) image_xscale = sign(hsp);
 	
 	moveScale = lengthdir_x(1, point_direction(x, y, objPlayer.x, objPlayer.y));
-	vsp = lengthdir_y(walkSpeed, point_direction(x, y, objPlayer.x, objPlayer.y));
+	vsp = (objPlayer.y - 8 - y) * chaseAccel;
 	
-	if (objPlayer.x < x - range || objPlayer.x > x + range) {
+	if (objPlayer.x < x - range * 2 || objPlayer.x > x + range * 2) {
 		moveScale = 0;
 		vsp = 0;
 		floatTick = 0;
 		state = enemDroneIdleState;
 	}
-	
-	if (place_meeting(x, y, objPlayer)) instance_destroy();
+	if (instance_exists(objPlayer) && objPlayer.x > x - atkRange && objPlayer.x < x + atkRange && objPlayer.y > y - atkRange && objPlayer.y < y + atkRange) {
+		state = enemDroneExplodeState;
+	}
 	
 }
 
-function enemMeleeAtkState() {
+function enemDroneExplodeState() {
+	
+	if (image_index >= 6) image_index -= 6
+	
+	hsp = (objPlayer.x - x) * chaseAccel;
+	vsp = (objPlayer.y - 8 - y) * chaseAccel;
+	
+	image_speed = 1.5;
+	if (explodeTick <= explodeTimer) {
+		explodeTick++;
+	} else {
+		instance_destroy();
+	}
 }

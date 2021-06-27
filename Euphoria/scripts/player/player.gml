@@ -16,9 +16,6 @@ function getInput() {
 function moveState() {
 	moveScale = keyRight - keyLeft;
 	curAccel = accel;
-
-	if (hsp != 0) image_xscale = sign(hsp);
-
 	if (place_meeting(x, y + 1, objSolid)) {
 		vsp = keyUp * -jumpSpeed;
 	}
@@ -78,6 +75,9 @@ function attackState() {
 }
 
 function handleSprites() {
+
+	if (hsp != 0) image_xscale = sign(hsp);
+
 	if (sign(hsp) == 1) {
 		atkSprite = sprPlayerAttackLeft;
 		moveSprite = sprPlayerRunLeft;

@@ -7,3 +7,5 @@ var rad = instance_create_layer(x, y, layer, objDamageBox);
 rad.sprite_index = sprExplosionDmgBox;
 rad.creator = id;
 rad.image_xscale = image_xscale;
+
+instance_create_layer(x, y, layer, effExplosion);

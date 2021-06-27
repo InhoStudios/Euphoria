@@ -1,6 +1,6 @@
 /// @description Insert description here
 // You can write your code in this editor
-if (!place_meeting(x, y, objSolid)) {
+if (!place_meeting(x, y, objSolid) && !stuck) {
 	image_angle -= image_xscale * 15;
 	x += image_xscale * flySpeed;
 } else {
@@ -13,6 +13,7 @@ if (!place_meeting(x, y, objSolid)) {
 				image_angle = irandom_range(210, 330);
 				break;
 		}
+		mask_index = noSpr;
 	}
 	stuck = true;
 }

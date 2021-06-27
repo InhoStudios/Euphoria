@@ -1,8 +1,9 @@
 hp = 3;
 
 // movement constants
-walkSpeed = 3;
+walkSpeed = 4;
 range = 128;
+atkRange = 32;
 jumpSpeed = 0.5;
 collideSpeed = 2;
 
@@ -13,6 +14,7 @@ floatTick = 0;
 floatTimer = room_speed;
 floatDir = 1;
 floatAccel = 0.01;
+chaseAccel = 0.05;
 naturalHeight = 56;
 
 // acceleration
@@ -34,6 +36,9 @@ resetState = enemDroneIdleState;
 
 resetTick = 0;
 resetTimer = 5;
+
+explodeTick = 0;
+explodeTimer = 15;
 
 // sprites
 atkSprite = sprDrone;
