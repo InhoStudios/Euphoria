@@ -6,10 +6,11 @@ getInput();
 declareAbilities();
 
 // movement constants
-moveSpeed = 5;
+walkSpeed = 2;
+moveSpeed = 4;
 jumpSpeed = 8;
 atkJolt = 3;
-slideSpeed = 9;
+slideSpeed = 8;
 curMoveSpeed = moveSpeed;
 
 dashDist = 256;
@@ -33,6 +34,7 @@ resetState = moveState;
 // sprites
 atkSprite = sprPlayerAttackLeft;
 moveSprite = sprPlayerRunLeft;
+walkSprite = sprPlayerWalkLeft;
 jumpSprite = noone;
 slideSprite = sprPlayerSlideLeft;
 idleSprite = sprPlayerIdleLeft;

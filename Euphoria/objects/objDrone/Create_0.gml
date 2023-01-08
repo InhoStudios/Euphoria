@@ -1,9 +1,10 @@
 hp = 3;
 
 // movement constants
-walkSpeed = 4;
-range = 128;
-atkRange = 32;
+walkSpeed = 3;
+moveSpeed = 3;
+range = 192;
+atkRange = 48;
 jumpSpeed = 0.5;
 collideSpeed = 2;
 

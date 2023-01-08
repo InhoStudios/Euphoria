@@ -9,10 +9,13 @@ function handleDamage(){
 			hp -= dmg.damage;
 		
 			// take damage
-			moveScale = dmg.image_xscale;
-			hsp = dmg.image_xscale * curMoveSpeed;
+			if (dmg.hsp != 0) {
+				moveScale = sign(dmg.hsp);
+			} else {
+				moveScale = sign(x - dmg.x);
+			}
+			hsp = moveScale * curMoveSpeed;
 			image_blend = c_red;
-			vsp = -jumpSpeed;
 			resetTick = resetTimer;
 		
 			with (dmg) instance_destroy();
@@ -40,7 +43,7 @@ function damageState() {
 function handlePhysics() {
 	
 	if (abs(moveScale) != 0 && abs(hsp) < curMoveSpeed) {
-		hsp += (moveScale) * curAccel;
+		hsp += moveScale * curAccel;
 	} else if (sign(moveScale) != sign(hsp) && abs(hsp) > 2 * abs(threshold)) {
 		hsp -= sign(hsp) * decel + sign(hsp) * curAccel * place_meeting(x, y + 1, objSolid);
 	} else if (abs(hsp) <= 2 * abs(threshold)) {
@@ -53,10 +56,18 @@ function handlePhysics() {
 	
 	// horizontal collision
 	if (place_meeting(x + hsp, y, objSolid)) {
-		while (!place_meeting(x + sign(hsp), y, objSolid)) {
-			x += sign(hsp);
+		var slope = 0;
+		while (place_meeting(x + hsp, y - slope, objSolid) && slope < abs(hsp)) {
+			slope += 1;
 		}
-		hsp = 0;
+		if (place_meeting(x + hsp, y - slope, objSolid)) {
+			while (!place_meeting(x + sign(hsp), y, objSolid)) {
+				x += sign(hsp);
+			}
+			hsp = 0;
+		} else {
+			y -= slope;
+		}
 	}
 	x += hsp;
 

@@ -32,7 +32,7 @@ function dash() {
 }
 
 function throwDagger() {
-	var dagger = instance_create_layer(x, y - 8, layer, objDagger);
+	var dagger = instance_create_layer(x, y, layer, objBullet);
 	dagger.image_xscale = image_xscale;
 	dagger.creator = id;
 }
@@ -45,7 +45,7 @@ function stim() {
 	
 }
 
-function lasso() {
+function grapple() {
 	
 }
 

@@ -3,3 +3,4 @@
 damage = 1;
 tick = 0;
 creator = noone;
+hsp = 0

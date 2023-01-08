@@ -2,7 +2,8 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 
 function enemMeleeMoveState() {
-	if (instance_exists(objPlayer) && objPlayer.x > x - range && objPlayer.x < x + range) {
+	if (instance_exists(objPlayer) && !collision_line(x, y, objPlayer.x, objPlayer.y, objSolid, 1, 0)
+	) {
 		moveScale = sign(objPlayer.x - x);
 	}
 
@@ -22,10 +23,7 @@ function enemMeleeMoveState() {
 function enemMeleeAtkState() {
 }
 
-function enemDroneIdleState() {
-	sprite_index = sprDrone;
-	
-	explodeTick = 0;
+function droneIdleState() {
 	
 	var atNatHeight = true;
 	
@@ -50,13 +48,26 @@ function enemDroneIdleState() {
 			floatTick = 0;
 			vsp = 0;
 		}
-		if (instance_exists(objPlayer) && objPlayer.x > x - range && objPlayer.x < x + range) {
-			state = enemDroneMoveState;
-		}
 	} else {
 		vsp -= floatAccel;
 		floatDir = -1;
 		floatTick = 0;
+	}
+}
+	
+
+function enemDroneIdleState() {
+	sprite_index = sprDrone;
+	
+	explodeTick = 0;
+	
+	droneIdleState();
+	
+	if (instance_exists(objPlayer) && 
+		objPlayer.x > x - range && objPlayer.x < x + range &&
+		!collision_line(x, y, objPlayer.x, objPlayer.y, objSolid, 1, 0)
+	) {
+		state = enemDroneMoveState;
 	}
 }
 
@@ -69,13 +80,18 @@ function enemDroneMoveState() {
 	moveScale = lengthdir_x(1, point_direction(x, y, objPlayer.x, objPlayer.y));
 	vsp = (objPlayer.y - 8 - y) * chaseAccel;
 	
-	if (objPlayer.x < x - range * 2 || objPlayer.x > x + range * 2) {
+	if (objPlayer.x < x - range * 2 || objPlayer.x > x + range * 2 || 
+		collision_line(x, y, objPlayer.x, objPlayer.y, objSolid, 1, 0)) {
 		moveScale = 0;
 		vsp = 0;
 		floatTick = 0;
 		state = enemDroneIdleState;
 	}
-	if (instance_exists(objPlayer) && objPlayer.x > x - atkRange && objPlayer.x < x + atkRange && objPlayer.y > y - atkRange && objPlayer.y < y + atkRange) {
+	if (instance_exists(objPlayer) && 
+		objPlayer.x > x - atkRange && 
+		objPlayer.x < x + atkRange && 
+		objPlayer.y > y - atkRange && 
+		objPlayer.y < y + atkRange) {
 		state = enemDroneExplodeState;
 	}
 	
@@ -88,7 +104,6 @@ function enemDroneExplodeState() {
 	hsp = (objPlayer.x - x) * chaseAccel;
 	vsp = (objPlayer.y - 8 - y) * chaseAccel;
 	
-	image_speed = 1.5;
 	if (explodeTick <= explodeTimer) {
 		explodeTick++;
 	} else {

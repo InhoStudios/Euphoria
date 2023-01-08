@@ -8,7 +8,7 @@ walkSpeed = 3;
 collideSpeed = 2;
 jumpSpeed = 8;
 atkJolt = 7;
-range = 64;
+range = 128;
 
 // acceleration
 accel = 0.5;
